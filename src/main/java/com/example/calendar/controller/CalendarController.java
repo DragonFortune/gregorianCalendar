@@ -2,6 +2,7 @@ package com.example.calendar.controller;
 
 import com.example.calendar.entity.CalendarEntity;
 import com.example.calendar.service.CalendarService;
+import com.example.calendar.util.CounterMetric;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ public class CalendarController {
 
     private final CalendarService calendarService;
 
+    @CounterMetric(name = "calendar.create", tags = {"endpoint", "create"})
     @PostMapping
     public ResponseEntity<CalendarEntity> create(
             @RequestParam int year) {
@@ -24,6 +26,7 @@ public class CalendarController {
         return ResponseEntity.ok(saved);
     }
 
+    @CounterMetric(name = "calendar.get", tags = {"endpoint", "get"})
     @GetMapping("/{id}")
     public ResponseEntity<String> getCalendar(@PathVariable Long id) {
         log.info("GET /api/v1/calendar/{} вызван", id);
@@ -32,6 +35,7 @@ public class CalendarController {
         return ResponseEntity.ok(content);
     }
 
+    @CounterMetric(name = "calendar.download", tags = {"endpoint", "download"})
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> downloadCalendar(@PathVariable Long id,
                                                    @RequestParam(defaultValue = "txt") String format) {
