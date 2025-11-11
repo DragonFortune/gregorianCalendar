@@ -1,4 +1,4 @@
-package com.example.calendar.contoller;
+package com.example.calendar.controller;
 
 import com.example.calendar.entity.CalendarEntity;
 import com.example.calendar.service.CalendarService;
@@ -27,7 +27,7 @@ public class CalendarController {
     @GetMapping("/{id}")
     public ResponseEntity<String> getCalendar(@PathVariable Long id) {
         log.info("GET /api/v1/calendar/{} вызван", id);
-        String content = calendarService.getById(id, "txt");
+        String content = calendarService.getById(id);
         log.info("Календарь с id {} получен", id);
         return ResponseEntity.ok(content);
     }

@@ -54,7 +54,7 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     @Transactional(readOnly = true)
-    public String getById(Long id, String format) {
+    public String getById(Long id) {
         log.info("Получение календаря с id {}", id);
 
         CalendarEntity entity = calendarRepository.findById(id)
