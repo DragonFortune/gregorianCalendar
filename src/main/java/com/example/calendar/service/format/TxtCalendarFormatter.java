@@ -1,7 +1,9 @@
 package com.example.calendar.service.format;
 
 import com.example.calendar.model.Calendar;
+import org.springframework.stereotype.Component;
 
+@Component("txt")
 public class TxtCalendarFormatter extends BaseCalendarFormatter {
 
     @Override

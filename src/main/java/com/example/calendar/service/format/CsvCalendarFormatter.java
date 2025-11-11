@@ -1,7 +1,9 @@
 package com.example.calendar.service.format;
 
 import com.example.calendar.model.Calendar;
+import org.springframework.stereotype.Component;
 
+@Component("csv")
 public class CsvCalendarFormatter extends BaseCalendarFormatter {
 
     @Override
