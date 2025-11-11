@@ -1,6 +1,8 @@
 package com.example.calendar.service.impl;
 
 import com.example.calendar.entity.CalendarEntity;
+import com.example.calendar.exception.types.InvalidYearException;
+import com.example.calendar.exception.types.NotFoundException;
 import com.example.calendar.model.Calendar;
 import com.example.calendar.model.Year;
 import com.example.calendar.repository.CalendarRepository;
@@ -27,6 +29,11 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     @Transactional
     public CalendarEntity generateAndSave(int year) {
+        if (year < 1600) {
+            log.error("Попытка создать календарь для года {} ниже 1600", year);
+            throw new InvalidYearException("Год должен быть >= 1600");
+        }
+
         log.info("Генерация календаря для {} года", year);
         return calendarRepository.findByYear(year)
                 .orElseGet(() -> {
@@ -53,7 +60,7 @@ public class CalendarServiceImpl implements CalendarService {
         CalendarEntity entity = calendarRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Календарь с id {} не найден", id);
-                    return new RuntimeException("Calendar not found with id " + id);
+                    return new NotFoundException("Календарь не найден с id " + id);
                 });
 
         return entity.getContent();
@@ -65,9 +72,7 @@ public class CalendarServiceImpl implements CalendarService {
         log.info("Подготовка файла календаря id={} для скачивания в формате {}", id, format);
 
         CalendarEntity entity = calendarRepository.findById(id)
-                .orElseThrow(() -> {
-                    return new RuntimeException("Calendar not found with id " + id);
-                });
+                .orElseThrow(() -> new NotFoundException("Календарь не найден с id " + id));
 
         Calendar calendar = new Calendar(new Year(entity.getYear()));
         CalendarFormatter formatter = formatters.getOrDefault(format.toLowerCase(), formatters.get("txt"));
